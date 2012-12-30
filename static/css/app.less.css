@@ -1,0 +1,64 @@
+* {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+html,
+body {
+  background: #ffe500;
+  color: #575757;
+  font-size: 14px;
+}
+input[placeholder]:-moz-placeholder:focus {
+  color: transparent !important;
+}
+input[placeholder]:focus::-moz-placeholder {
+  color: transparent !important;
+}
+input[placeholder]:focus::-webkit-input-placeholder {
+  color: transparent !important;
+}
+input[placeholder]::-webkit-input-placeholder {
+  font-size: 24px;
+  line-height: 32px;
+  text-align: center;
+}
+.app {
+  margin: 15% auto;
+  text-align: center;
+  width: 80%;
+}
+input {
+  display: block;
+  font-size: 28px;
+  line-height: 30px;
+  margin: 15px auto;
+  width: 375px;
+}
+label {
+  font-size: 36px;
+  line-height: 38px;
+  font-weight: bold;
+}
+.cost {
+  color: green;
+  font-weight: 400;
+}
+.cost:before {
+  color: #009a00;
+  content: "$";
+  font-size: 22px;
+  vertical-align: middle;
+  padding-right: 2px;
+}
+.payme {
+  color: #777;
+  display: none;
+  font-weight: 300;
+  font-size: 28px;
+  line-height: 30px;
+}
+.payme.active {
+  display: block;
+}

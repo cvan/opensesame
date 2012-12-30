@@ -1,0 +1,80 @@
+{% set CSS = [
+    'normalize.css',
+    'app.less',
+] -%}
+{% set JS = [
+    '//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js',
+    '//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.3/underscore-min.js',
+    'timestring.js',
+] -%}
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>OpenSesame</title>
+    {%- for stylesheet in CSS %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/' + stylesheet + ('.css' if stylesheet.endswith('.less') else '')) }}">
+    {%- endfor %}
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+    <link rel="apple-touch-icon-precomposed" href="{{ url_for('static', filename='img/touch-icon-iphone4.png') }}" />
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="{{ url_for('static', filename='img/touch-icon-iphone4.png') }}" />
+
+    <link href="" media="(device-width: 320px) and (device-height: 480px) and
+        (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">
+
+    <link rel="apple-touch-startup-image" href="{{ url_for('static', filename='img/splash-screen-320x480.png') }}">
+    <link rel="apple-touch-startup-image" sizes="640x920" href="{{ url_for('static', filename='img/splash-screen-640x920.png') }}">
+    <link rel="apple-touch-startup-image" sizes="640x940" href="{{ url_for('static', filename='img/splash-screen-640x920.png') }}">
+    <link rel="apple-touch-startup-image" sizes="640x960" href="{{ url_for('static', filename='img/splash-screen-640x920.png') }}">
+  </head>
+  <body>
+    <div class="app">
+        <section class="pay">
+            <label for="placeholder">
+                How long do you want Internet for?
+                <input type="text" placeholder="e.g., 15 minutes, 1 day, 6 months">
+                <div class="payme">You owe me <b class="cost"></b></div>
+            </label>
+        </section>
+    </div>
+
+    {%- for script in JS %}
+    <script type="text/javascript" src="{{ script if script.startswith(('//', 'http')) else url_for('static', filename='js/' + script) }}"></script>
+    {%- endfor %}
+    <script>
+    (function() {
+        var monthlyBill = 50.00;
+        var ts = new Timestring();
+        function parseMinutes(amount) {
+            return ts.parse(amount, 'm');
+        }
+        function calculate(amount) {
+            amount = parseMinutes(amount);
+            var perDay = monthlyBill / 30;
+            var perHour = perDay / 24;
+            var perMinute = perHour / 60;
+            var result = amount * perMinute;
+            return parseFloat(result.toFixed(2));
+        }
+        $('input').on('keyup paste', function() {
+            var val = $(this).val();
+            var calcVal = val ? calculate(val) : '0.00';
+            var $payme = $('.payme');
+            var $cost = $('.cost');
+            if (val) {
+                if (!$cost.text() || $cost.text() != calcVal) {
+                    $payme.addClass('active');
+                    $cost.text(calcVal);
+                }
+            } else {
+                $payme.removeClass('active');
+                $cost.text('');
+            }
+        });
+    })();
+    </script>
+  </body>
+</html>

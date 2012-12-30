@@ -1,0 +1,6 @@
+dotcloud
+flask
+jinja2
+pyquery
+redis
+requests
